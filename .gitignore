@@ -39,3 +39,15 @@ luac.out
 *.x86_64
 *.hex
 
+nbproject/private/
+Shared/build/
+Shared/dist/
+build/
+dist/
+JSudoku/build/
+JSudoku/dist/
+jstart/build/
+jstart/dist/
+jstart/nbproject/
+JSudoku/nbproject/
+Shared/nbproject/

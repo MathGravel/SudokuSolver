@@ -135,6 +135,9 @@ public final class JMainFrame extends JFrame
         m_grid = new JSudokuGrid(m_table);
         cp.add(m_grid, BorderLayout.CENTER);
 
+        JHelpDesk test = new JHelpDesk();
+        //cp.add(test,BorderLayout.EAST);
+        
         m_menuBar = new JMenuBar();
         setJMenuBar(m_menuBar);
 
@@ -613,7 +616,7 @@ public final class JMainFrame extends JFrame
                     bufInitMask.append(",");
                     bufInvalidMask.append(",");
                 }
-                buf.append(Integer.toString(m_table.m_data[row][col]));
+                buf.append(m_table.m_data[row][col].toString());
                 bufInitMask.append(Integer.toString(initMask[row][col] ? 1 : 0));
                 bufInvalidMask.append(Integer.toString(invalidMask[row][col] ? 1 : 0));
             }
@@ -675,7 +678,7 @@ public final class JMainFrame extends JFrame
                 {
                     for (col=0; col<9; col++)
                     {
-                        m_table.m_data[row][col] = Integer.parseInt(strArray[col]);
+                        m_table.m_data[row][col].setNum(Integer.parseInt(strArray[col]));
                         initMask[row][col] = Integer.parseInt(strArrayInitMask[col]) != 0;
                         invalidMask[row][col] = Integer.parseInt(strArrayInvalidMask[col]) != 0;
                     }

@@ -24,6 +24,7 @@
 package jsudoku;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 
 import java.awt.event.ComponentAdapter;
@@ -45,11 +46,13 @@ import java.awt.event.KeyEvent;
 
     
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.RepaintManager;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
+import javax.swing.WindowConstants;
     
 /**
  *
@@ -123,7 +126,7 @@ public final class JSudokuGrid extends JComponent implements Printable
 			m_lastCol = col;
 			m_lastRow = row;
 			
-			m_textField = new JTextField(m_table.m_data[row][col] != 0 ? Integer.toString(m_table.m_data[row][col]) : "");
+			m_textField = new JTextField(m_table.m_data[row][col].getNum()!= 0 ? m_table.m_data[row][col].toString() : "");
 			m_textField.setForeground(Main.m_settings.getDisplayUserTextColor());
 			m_textField.addKeyListener(new KeyAdapter()
 			{
@@ -139,6 +142,14 @@ public final class JSudokuGrid extends JComponent implements Printable
 			addTextField();
 			m_textField.requestFocusInWindow();
 		    }
+                    else if (ev.getButton() == MouseEvent.BUTTON3 && !m_initMask[row][col]) {
+                        JPoss win = new JPoss(m_table.m_data[row][col]);
+                        win.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        win.setVisible(true);
+                        setField(true);
+                        repaint();
+                        revalidate();
+                    }
 		    else setField(true);
 		}
 	    }
@@ -172,7 +183,7 @@ public final class JSudokuGrid extends JComponent implements Printable
 	    for (col=0; col<9; col++)
 	    {
 		if (!m_initMask[row][col])
-		    m_table.m_data[row][col] = 0;
+		    m_table.m_data[row][col].setNum(0);
 	    }
 	}
 	initMask(false);
@@ -185,7 +196,8 @@ public final class JSudokuGrid extends JComponent implements Printable
 	{
 	    for (col=0; col<9; col++)
 	    {
-		m_initMask[row][col] = m_table.m_data[row][col] != 0;
+                System.out.print(row + " " + col + " " + m_table.m_data[row][col].getNum() );
+		m_initMask[row][col] = m_table.m_data[row][col].getNum() != 0;
 		m_invalidMask[row][col] = false;
 	    }
 	}
@@ -216,14 +228,14 @@ public final class JSudokuGrid extends JComponent implements Printable
 	{
 	    String str = m_textField.getText();
 	    if (str.isEmpty())
-		m_table.m_data[m_lastRow][m_lastCol] = 0;
+		m_table.m_data[m_lastRow][m_lastCol].setNum(0);
 	    else
 	    {
 		try
 		{
 		    int val = Integer.parseInt(str);
 		    if (str.length() == 1 && val >= 1 && val <=9)
-			m_table.m_data[m_lastRow][m_lastCol] = val;
+			m_table.m_data[m_lastRow][m_lastCol].setNum(val);
 		}
 		catch (NumberFormatException ex)
 		{}
@@ -361,14 +373,28 @@ public final class JSudokuGrid extends JComponent implements Printable
 	{
 	    for (col=0; col<9; col++)
 	    {
-		if (m_table.m_data[row][col] != 0)
+		if (m_table.m_data[row][col].getNum() != 0 )
 		{
-		    String str = new String(Integer.toString(m_table.m_data[row][col]));
+		    String str = m_table.m_data[row][col].toString();
 		    int x = m_xOffset+(col*w)/9 + w/18 - (int)(rect.getWidth()/2);
 		    int y = yOffset+(row*h)/9 + h/18 + (int)(rect.getHeight()/2);
 		    g2d.setColor(m_initMask[row][col] ? (bPrint ? Main.m_settings.getPrintInitTextColor() : Main.m_settings.getDisplayInitTextColor()) : (m_invalidMask[row][col] ? (bPrint ? Main.m_settings.getPrintInvalidTextColor() : Main.m_settings.getDisplayInvalidTextColor()) : (bPrint ? Main.m_settings.getPrintUserTextColor() : Main.m_settings.getDisplayUserTextColor())));
 		    g2d.drawString(str, x, y);
 		}
+                else if (m_table.m_data[row][col].toString() != "") {
+                    String str = m_table.m_data[row][col].toString();
+		    int x = m_xOffset+(col*w)/9 ;
+		    int y = yOffset+(row*h)/9  + (int)(rect.getHeight()/2);
+                    Font f = font.deriveFont((float)(font.getSize()/2));
+                    g2d.setFont(f);
+                    g2d.setColor(new Color(150,0,0));
+                    y -= g2d.getFontMetrics().getHeight();
+                    for (String line : str.split("\n")) {
+                        g2d.drawString(line,x,y += g2d.getFontMetrics().getHeight());
+                    }
+		    //g2d.drawString(str, x, y);
+                    g2d.setFont(font);
+                }
 	    }
 	}
 	if (m_bPrintFooter)

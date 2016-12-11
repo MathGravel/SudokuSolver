@@ -38,7 +38,7 @@ import java.security.NoSuchAlgorithmException;
 
 public final class JSudokuTable
 {
-    public int m_data[][];
+    public JSudokuCase m_data[][];
     public int m_corr = 0;
     Random m_random = null;
     private String m_hash = new String();
@@ -46,7 +46,12 @@ public final class JSudokuTable
     /** Creates a new instance of JSudokuTable */
     public JSudokuTable()
     {
-        m_data = new int [9][9];
+        m_data = new JSudokuCase [9][9];
+        for (int i = 0; i < 9;i++){
+            for (int j = 0; j < 9;j++){
+                m_data[i][j] = new JSudokuCase();
+                    }
+        }
         initRandom();
         init();
     }
@@ -57,19 +62,19 @@ public final class JSudokuTable
         {
             for (int col=0; col<9; col++)
             {
-                m_data[row][col] = 0;
+                m_data[row][col].setNum(0);
             }
         }
     }
     
     public JSudokuTable(JSudokuTable table)
     {
-        m_data = new int [9][9];
+        m_data = new JSudokuCase [9][9];
         for (int row=0; row<9; row++)
         {
             for (int col=0; col<9; col++)
             {
-                m_data[row][col] = table.m_data[row][col];
+                m_data[row][col] = new JSudokuCase(table.m_data[row][col]);
             }
         }
     }
@@ -81,7 +86,7 @@ public final class JSudokuTable
         {
             for (int col=0; col<9; col++)
             {
-                table.m_data[row][col] = m_data[row][col];
+                table.m_data[row][col] = new JSudokuCase(m_data[row][col]);
             }
         }
         return table;
@@ -93,7 +98,8 @@ public final class JSudokuTable
         {
             for (int col=0; col<9; col++)
             {
-                m_data[row][col] = table.m_data[row][col];
+                m_data[row][col].setNum(table.m_data[row][col].getNum());
+                m_data[row][col].SetPossibilities(table.m_data[row][col].getPossibilities());
             }
         }
     }
@@ -128,7 +134,7 @@ public final class JSudokuTable
         {
             for (int col=0; col<9; col++)
             {
-            adler32.update((byte)m_data[row][col]);
+            adler32.update((byte)m_data[row][col].getNum());
             }
         }
         return Long.toHexString(adler32.getValue());
@@ -137,21 +143,21 @@ public final class JSudokuTable
     public boolean isValid(int row, int col)
     {
         int j, h;
-        h = m_data[row][col];
+        h = m_data[row][col].getNum();
         if ( h != 0)
         {
             // check cols
             for (j=0; j<9; j++)
             {
             if (col==j) continue;
-            if (m_data[row][j] == h)
+            if (m_data[row][j].getNum() == h)
                 return false;
             }
             // check rows
             for (j=0; j<9; j++)
             {
             if (row==j) continue;
-            if (m_data[j][col] == h)
+            if (m_data[j][col].getNum() == h)
                 return false;
             }
             // check square
@@ -166,7 +172,7 @@ public final class JSudokuTable
             for (rowIndex=0; rowIndex<3; rowIndex++)
             {
                 if (rowBlockOffset==rowIndex) continue;
-                if (m_data[rowBlock*3 + rowIndex][colBlock*3 + colIndex] == h)
+                if (m_data[rowBlock*3 + rowIndex][colBlock*3 + colIndex].getNum() == h)
                 return false;
             }
             }
@@ -208,7 +214,7 @@ public final class JSudokuTable
         {
             for (col=0; col<9; col++)
             {
-            if (m_data[row][col] == 0)
+            if (m_data[row][col].getNum()== 0)
                 return false;
             }
         }
@@ -232,8 +238,8 @@ public final class JSudokuTable
         // check rows and cols
         for (i=0; i<9; i++)
         {
-            mask[m_data[row][i]] = 0;
-            mask[m_data[i][col]] = 0;
+            mask[m_data[row][i].getNum()] = 0;
+            mask[m_data[i][col].getNum()] = 0;
         }
         // check square
         int rowBlock = (row/3)*3;
@@ -242,7 +248,7 @@ public final class JSudokuTable
         for (colIndex=0; colIndex<3; colIndex++)
         {
             for (rowIndex=0; rowIndex<3; rowIndex++)
-            mask[m_data[rowBlock + rowIndex][colBlock + colIndex]] = 0;
+            mask[m_data[rowBlock + rowIndex][colBlock + colIndex].getNum()] = 0;
         }
         int count = 0;
         for (i=1; i<10; i++)
@@ -268,7 +274,7 @@ public final class JSudokuTable
         {
             for (col=0; col<9; col++)
             {
-            if (m_data[row][col] == 0)
+            if (m_data[row][col].getNum() == 0)
             {
                 count = getPossibleValueMask(row, col, mask2);
                 if (count == 0) return 0;
@@ -295,7 +301,7 @@ public final class JSudokuTable
         {
             for (col=0; col<9; col++)
             {
-            System.err.print(m_data[row][col]);
+            System.err.print(m_data[row][col].getNum());
             if ((col+1)%3 == 0)
                 System.err.print(" | ");
             else
@@ -316,7 +322,7 @@ public final class JSudokuTable
         {
             for (row=0; row<9; row++)
             {
-            if (m_data[row][col] == 0)
+            if (m_data[row][col].getNum() == 0)
                 array.add(new Integer(col + row*9));
             }
         }
@@ -331,7 +337,7 @@ public final class JSudokuTable
         {
             for (row=0; row<9; row++)
             {
-            if (m_data[row][col] == 0)
+            if (m_data[row][col].getNum() == 0)
                 count++;
             }
         }
@@ -374,20 +380,21 @@ public final class JSudokuTable
             while(array2.size() != 0)
             {
                 index = m_random.nextInt(array2.size());
-                m_data[row][col] = array2.get(index);
+                m_data[row][col].setNum(array2.get(index));
                 JSudokuTable sk = new JSudokuTable(this);
                 if (solve())
                 {
                     set(sk);
                     flag = doCreate(freeFields);
                     if (flag) break;
-                    else m_data[row][col] = 0;
+                    else 
+                        m_data[row][col].setNum(0);
                 }
                 else
                 {
                     // undo
                     set(sk);
-                    m_data[row][col] = 0;
+                    m_data[row][col].setNum(0);
                 }
                 array2.remove(index);
             }
@@ -419,13 +426,13 @@ public final class JSudokuTable
                 {
                     if (mask[i] != 0)
                     {
-                        m_data[rowCol[0]][rowCol[1]] = i;
+                        m_data[rowCol[0]][rowCol[1]].setNum(i);
                         // trace();
                         if (flag = doSolve()) break;
                     }
                 }
                 if (!flag)
-                    m_data[rowCol[0]][rowCol[1]] = 0;
+                    m_data[rowCol[0]][rowCol[1]].setNum(0);
             }
         }
         else flag = true;
