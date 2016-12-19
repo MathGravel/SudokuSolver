@@ -83,6 +83,7 @@ import shared.popupmenu.JStatusMenuItem;
 import shared.popupmenu.JStatusRadioButtonMenuItem;
 import shared.browser.JBrowser;
 import shared.browserlaunch.JBrowserLaunch;
+import tutorial.student.Student;
 
 
 public final class JMainFrame extends JFrame
@@ -94,6 +95,7 @@ public final class JMainFrame extends JFrame
     private JSudokuTable m_table = new JSudokuTable();
     private JMenuBar m_menuBar;
     private PageFormat m_pageFormat = null;
+    private Student student = null;
 
 
     private static final String[] m_homepage = {"http://mitglied.lycos.de/jsudokucreator/", "http://sourceforge.net/projects/jsudokucreator/"};
@@ -350,6 +352,25 @@ public final class JMainFrame extends JFrame
                     thread.start();
                     }
                 }
+            }
+        });
+        
+        menu = new JStatusMenu(Main.getString("menu_strategy"), m_statusBar);
+        m_menuBar.add(menu);
+        menuItem = new JStatusMenuItem(Main.getString("menu_strategy_square"), Main.getString("statusbar_menu_strategy_square"), m_statusBar);
+        menu.add(menuItem);
+         menuItem.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ev){
+                m_grid.removeTextField(true);
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                m_table.create(0);
+                m_grid.initMask(true);
+                setCursor(Cursor.getDefaultCursor());
+                System.err.println("Corr: " + m_table.m_corr);
+                JSudokuTable clone = m_table.clone();
+                clone.doSolve();
+                m_table.m_solution = clone.m_data;
             }
         });
 

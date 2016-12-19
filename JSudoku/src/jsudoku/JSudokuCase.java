@@ -5,12 +5,9 @@
  */
 package jsudoku;
 
-import java.awt.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.TreeSet;
-import javax.swing.JTextField;
 
 /**
  *
@@ -22,6 +19,7 @@ public class JSudokuCase  {
     public final Map<Integer,Boolean>  tr;
     private int num;
     private boolean check = false;
+    private boolean fond = false;
     
     public JSudokuCase(){
         num = 0;
@@ -71,7 +69,14 @@ public class JSudokuCase  {
         }
         check = true;
     }
-    
+
+    public boolean isFond() {
+        return fond;
+    }
+
+    public void setFond(boolean fond) {
+        this.fond = fond;
+    }
     
     public String toString() {
         if (num > 0) 
@@ -103,9 +108,4 @@ public class JSudokuCase  {
             return str.toString();
         }
     }
-    
-    
-    
-    
-    
 }

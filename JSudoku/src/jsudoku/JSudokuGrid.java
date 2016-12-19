@@ -52,7 +52,8 @@ import javax.swing.JTextField;
 import javax.swing.RepaintManager;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
-import javax.swing.WindowConstants;
+import tutorial.tutor.Competence;
+import tutorial.tutor.Square;
     
 /**
  *
@@ -77,6 +78,7 @@ public final class JSudokuGrid extends JComponent implements Printable
     private boolean m_bPrintHeader = true;
     private int m_lastPage = -1;
     private boolean m_bPrintSolved = false;
+    private int strategieCarreRate = 0;
     
     public void setPrintSolved(boolean bPrintSolved)
     {
@@ -120,7 +122,7 @@ public final class JSudokuGrid extends JComponent implements Printable
 		{
 		    int col = ((pt.x - m_xOffset)*9)/w;
 		    int row = ((pt.y - m_yOffset - m_headerHeight)*9)/h;
-		    if (ev.getButton() ==MouseEvent.BUTTON1 && !m_initMask[row][col])
+		    if (ev.getButton() == MouseEvent.BUTTON1 && !m_initMask[row][col])
 		    {
 			setField(false);
 			m_lastCol = col;
@@ -135,8 +137,9 @@ public final class JSudokuGrid extends JComponent implements Printable
 				char ch = ev.getKeyChar();
 				if (ch == KeyEvent.VK_ESCAPE)
 				    grid.removeTextField(true);
-				if (ch == KeyEvent.VK_ENTER)
+				if (ch == KeyEvent.VK_ENTER){
 				    setField(true);
+                                }
 			    }
 			});
 			addTextField();
@@ -234,8 +237,9 @@ public final class JSudokuGrid extends JComponent implements Printable
 		try
 		{
 		    int val = Integer.parseInt(str);
-		    if (str.length() == 1 && val >= 1 && val <=9)
+		    if (str.length() == 1 && val >= 1 && val <=9){
 			m_table.m_data[m_lastRow][m_lastCol].setNum(val);
+                    }
 		}
 		catch (NumberFormatException ex)
 		{}
@@ -315,6 +319,7 @@ public final class JSudokuGrid extends JComponent implements Printable
 	g2d.fillRect(0, 0, dim.width, dim.height);
 	TextLayout layout;
 	Rectangle2D rect;
+        Color red = new Color(150,0,0);
 	if (m_bPrintFooter)
 	{
 	    g2d.setFont(getFont().deriveFont(Font.BOLD, 16));
@@ -387,12 +392,19 @@ public final class JSudokuGrid extends JComponent implements Printable
 		    int y = yOffset+(row*h)/9  + (int)(rect.getHeight()/2);
                     Font f = font.deriveFont((float)(font.getSize()/2));
                     g2d.setFont(f);
-                    g2d.setColor(new Color(150,0,0));
+                    g2d.setColor(red);
                     y -= g2d.getFontMetrics().getHeight();
                     for (String line : str.split("\n")) {
                         g2d.drawString(line,x,y += g2d.getFontMetrics().getHeight());
                     }
 		    //g2d.drawString(str, x, y);
+                    g2d.setFont(font);
+                } else if (m_table.m_data[row][col].getNum() == 0 && m_table.m_data[row][col].isFond()){
+                    System.out.println("modifier fond");
+                    g2d.setColor(red);
+                    int x = m_xOffset+(col*w)/9;
+		    int y = yOffset+(row*h)/9;
+                    g2d.drawRect(x, y, w/9, h/9);
                     g2d.setFont(font);
                 }
 	    }
@@ -433,5 +445,13 @@ public final class JSudokuGrid extends JComponent implements Printable
 	    }
 	}
 	return count;
+    }
+    
+    private void checkStrategie(){
+        if(m_table.m_data[m_lastRow][m_lastCol].isFond())
+            strategieCarreRate = 0;
+        
+        Competence square = new Square();
+        square.verifieStratégie(m_lastRow, m_lastCol, m_table);
     }
 }

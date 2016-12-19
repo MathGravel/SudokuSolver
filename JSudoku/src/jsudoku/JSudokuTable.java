@@ -39,6 +39,7 @@ import java.security.NoSuchAlgorithmException;
 public final class JSudokuTable
 {
     public JSudokuCase m_data[][];
+    public JSudokuCase m_solution[][] = null;
     public int m_corr = 0;
     Random m_random = null;
     private String m_hash = new String();
