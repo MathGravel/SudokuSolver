@@ -65,7 +65,6 @@ public class JPoss extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         JB1 = new javax.swing.JButton();
         JB2 = new javax.swing.JButton();
@@ -77,7 +76,6 @@ public class JPoss extends javax.swing.JFrame {
         JB8 = new javax.swing.JButton();
         JB9 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout(3, 3));
 
         JB1.setText("jButton1");
@@ -89,10 +87,6 @@ public class JPoss extends javax.swing.JFrame {
         getContentPane().add(JB1);
 
         JB2.setText("jButton1");
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, JB3, org.jdesktop.beansbinding.ELProperty.create("${selected}"), JB2, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         getContentPane().add(JB2);
 
         JB3.setText("jButton1");
@@ -115,8 +109,6 @@ public class JPoss extends javax.swing.JFrame {
 
         JB9.setText("jButton1");
         getContentPane().add(JB9);
-
-        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -146,6 +138,5 @@ public class JPoss extends javax.swing.JFrame {
     private javax.swing.JButton JB7;
     private javax.swing.JButton JB8;
     private javax.swing.JButton JB9;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

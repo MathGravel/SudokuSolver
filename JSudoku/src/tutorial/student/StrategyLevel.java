@@ -10,5 +10,5 @@ package tutorial.student;
  * @author Nicolas
  */
 public enum StrategyLevel {
-    faible, intermédiaire, bonne, apprise;
+    faible, intermediaire, bonne, apprise;
 }

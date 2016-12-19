@@ -22,7 +22,7 @@ public abstract class Competence {
     }
     
     public abstract BayesNet creerReseau();
-    public abstract boolean verifieStratégie(int m_lastRow, int m_lastCol, JSudokuTable m_table);
+    public abstract boolean verifieStrategie(int m_lastRow, int m_lastCol, JSudokuTable m_table);
 
     public int getId() {
         return id;

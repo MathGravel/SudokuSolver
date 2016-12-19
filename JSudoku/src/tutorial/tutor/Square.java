@@ -18,11 +18,11 @@ import org.eclipse.recommenders.jayes.BayesNode;
 public class Square extends Competence {
     
     public Square() {
-        super(1, "Stratégie carré");
+        super(1, "Stratï¿½gie carrï¿½");
     }
     
     @Override
-    public boolean verifieStratégie(int m_lastRow, int m_lastCol, JSudokuTable m_table){
+    public boolean verifieStrategie(int m_lastRow, int m_lastCol, JSudokuTable m_table){
         if(m_table.m_data[m_lastRow][m_lastCol] != m_table.m_solution[m_lastRow][m_lastCol]){
             return false;
         }
@@ -59,12 +59,12 @@ public class Square extends Competence {
     @Override
     public BayesNet creerReseau() {
         BayesNet reseau = new BayesNet();
-        BayesNode square = reseau.createNode("stratégie carré");
+        BayesNode square = reseau.createNode("strategie carre");
         square.addOutcomes("true", "false");
         square.setProbabilities(0.5, 0.5);
         List<BayesNode> squareList = Arrays.asList(square);
         
-        BayesNode coupOk = reseau.createNode("coup réussi");
+        BayesNode coupOk = reseau.createNode("coup reussi");
         coupOk.addOutcomes("true", "false");
         coupOk.setParents(squareList);
         coupOk.setProbabilities(0.5, 0.5);
@@ -74,7 +74,7 @@ public class Square extends Competence {
         descriptionOk.setParents(squareList);
         descriptionOk.setProbabilities(0.5, 0.5);
         
-        BayesNode carreOk = reseau.createNode("joue dans le bon carré");
+        BayesNode carreOk = reseau.createNode("joue dans le bon carre");
         carreOk.addOutcomes("true", "false");
         carreOk.setParents(squareList);
         carreOk.setProbabilities(0.5, 0.5);

@@ -452,6 +452,6 @@ public final class JSudokuGrid extends JComponent implements Printable
             strategieCarreRate = 0;
         
         Competence square = new Square();
-        square.verifieStratégie(m_lastRow, m_lastCol, m_table);
+        square.verifieStrategie(m_lastRow, m_lastCol, m_table);
     }
 }
