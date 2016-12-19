@@ -23,6 +23,10 @@ public class Square extends Competence {
     
     @Override
     public boolean verifieStratégie(int m_lastRow, int m_lastCol, JSudokuTable m_table){
+        if(m_table.m_data[m_lastRow][m_lastCol] != m_table.m_solution[m_lastRow][m_lastCol]){
+            return false;
+        }
+        
         int rowCarre = (m_lastRow/3)*3;
         int colCarre = (m_lastCol/3)*3;
         boolean unManque = false;
