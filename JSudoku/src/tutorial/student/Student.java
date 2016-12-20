@@ -5,7 +5,8 @@
  */
 package tutorial.student;
 
-import org.eclipse.recommenders.jayes.BayesNet;
+import jsudoku.JSudokuTable;
+import tutorial.tutor.Competence;
 
 /**
  *
@@ -13,11 +14,11 @@ import org.eclipse.recommenders.jayes.BayesNet;
  */
 public class Student {
     private StrategyLevel level;
-    private BayesNet reseau;
+    private Competence competence;
 
-    public Student(BayesNet reseau) {
+    public Student(Competence competence) {
         this.level = StrategyLevel.faible;
-        this.reseau = reseau;
+        this.competence = competence;
     }
 
     public StrategyLevel getLevel() {
@@ -28,11 +29,24 @@ public class Student {
         this.level = level;
     }
 
-    public BayesNet getReseau() {
-        return reseau;
+    public Competence getCompetence() {
+        return competence;
     }
 
-    public void setReseau(BayesNet reseau) {
-        this.reseau = reseau;
+    public void setCompetence(Competence competence) {
+        this.competence = competence;
+    }
+    
+    /**
+     * Vérifie la strategie et obtient une inference pour modifier le niveau du joueur
+     * @param m_lastRow ligne joue
+     * @param m_lastCol colonne joue
+     * @param m_table table de jeu
+     */
+    public void inferer(int m_lastRow, int m_lastCol, JSudokuTable m_table){
+        if(m_lastRow != -1 || m_lastCol != -1){
+            double[] infere = competence.verifieStrategie(0, 0, m_table);
+            //JESS POUR CHANGER LE LEVEL
+        }
     }
 }

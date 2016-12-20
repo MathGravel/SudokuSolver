@@ -52,8 +52,7 @@ import javax.swing.JTextField;
 import javax.swing.RepaintManager;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
-import tutorial.tutor.Competence;
-import tutorial.tutor.Square;
+import tutorial.student.Student;
     
 /**
  *
@@ -78,7 +77,7 @@ public final class JSudokuGrid extends JComponent implements Printable
     private boolean m_bPrintHeader = true;
     private int m_lastPage = -1;
     private boolean m_bPrintSolved = false;
-    private int strategieCarreRate = 0;
+    private Student student = null;
     
     public void setPrintSolved(boolean bPrintSolved)
     {
@@ -98,6 +97,14 @@ public final class JSudokuGrid extends JComponent implements Printable
     public boolean getPrintFooter()
     {
 	return m_bPrintFooter;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
     
     /** Creates a new instance of JSudokuGrid */
@@ -239,6 +246,7 @@ public final class JSudokuGrid extends JComponent implements Printable
 		    int val = Integer.parseInt(str);
 		    if (str.length() == 1 && val >= 1 && val <=9){
 			m_table.m_data[m_lastRow][m_lastCol].setNum(val);
+                        checkStrategie();
                     }
 		}
 		catch (NumberFormatException ex)
@@ -448,10 +456,8 @@ public final class JSudokuGrid extends JComponent implements Printable
     }
     
     private void checkStrategie(){
-        if(m_table.m_data[m_lastRow][m_lastCol].isFond())
-            strategieCarreRate = 0;
-        
-        Competence square = new Square();
-        square.verifieStrategie(m_lastRow, m_lastCol, m_table);
+        if(student != null){
+            student.inferer(m_lastRow, m_lastCol, m_table);
+        }
     }
 }

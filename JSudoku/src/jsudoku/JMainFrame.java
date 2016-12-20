@@ -84,6 +84,7 @@ import shared.popupmenu.JStatusRadioButtonMenuItem;
 import shared.browser.JBrowser;
 import shared.browserlaunch.JBrowserLaunch;
 import tutorial.student.Student;
+import tutorial.tutor.Square;
 
 
 public final class JMainFrame extends JFrame
@@ -95,7 +96,6 @@ public final class JMainFrame extends JFrame
     private JSudokuTable m_table = new JSudokuTable();
     private JMenuBar m_menuBar;
     private PageFormat m_pageFormat = null;
-    private Student student = null;
 
 
     private static final String[] m_homepage = {"http://mitglied.lycos.de/jsudokucreator/", "http://sourceforge.net/projects/jsudokucreator/"};
@@ -371,6 +371,7 @@ public final class JMainFrame extends JFrame
                 JSudokuTable clone = m_table.clone();
                 clone.doSolve();
                 m_table.m_solution = clone.m_data;
+                m_grid.setStudent(new Student(new Square(m_table)));
             }
         });
 
